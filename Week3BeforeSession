@@ -1,0 +1,86 @@
+GIF - http://recordit.co/Ma5qz7xdKJ
+
+// Binary Search - Square root of integer
+
+public int sqrt(int a) {
+    if(a == 0 || a == 1) {
+        return a;
+    }
+    long s = 1;
+    long e = a;
+    long res = 0;
+    while(s <= e) {
+        long mid = (s+e)/2;
+        long p = mid*mid;
+        if(p == a) {
+            return (int)mid;
+        }
+
+        if(p < a) {
+            s = mid + 1;
+            res = mid;
+        }
+        else {
+            e = mid - 1;
+        }
+    }
+    return (int)res;
+}
+
+// Binary Search - Implement power function
+
+public int pow(int x, int n, int d) {
+    return (int)powLong(x, n, d);
+}
+
+public long powLong(long x, long n, long d) {
+    long result;
+    if (d == 1) {
+      result = 0;     
+  }
+  else {
+        x = x % d;
+
+        if (n == 0) {
+            result =  1;
+        }
+        else if (n == 1){ 
+            result =  x;
+        }
+        else {
+            if (n % 2 == 1) {
+                result = x * powLong(x, n-1, d);
+            }
+            else {
+                result = (powLong(((x * x) % d), n/2, d));
+            }
+      }
+  }
+  return (result + d) % d;
+}
+
+// Trees - Inorder traversal
+
+public ArrayList<Integer> inorderTraversal(TreeNode a) {
+    ArrayList<Integer> res = new ArrayList<Integer>();
+    inorder(a, res);
+    return res;
+}
+
+public void inorder(TreeNode a, ArrayList<Integer> res) {
+    if(a == null){
+        return;
+    }
+    inorder(a.left, res);
+    res.add(a.val);
+    inorder(a.right, res);
+}
+
+// Trees - Max depth of binary tree
+
+public int maxDepth(TreeNode a) {
+    if(a == null) {
+        return 0;
+    }
+    return 1 + Math.max(maxDepth(a.left), maxDepth(a.right));
+}
