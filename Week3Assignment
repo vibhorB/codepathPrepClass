@@ -1,0 +1,93 @@
+// GIF - http://recordit.co/7DgT4p0ksH
+
+//Binary Search - Sorted Insert Position
+
+public int searchInsert(ArrayList<Integer> a, int b) {
+	    return binarySearch(a, 0, a.size()-1, b);
+	}
+	
+private int binarySearch(ArrayList<Integer> l, int low, int high, int key) {
+   if (high < low)
+       return low;
+
+   int mid = (low + high)/2;  
+   if (key == l.get(mid))
+       return mid;
+   if (key > l.get(mid))
+       return binarySearch(l, (mid + 1), high, key);
+   return binarySearch(l, low, (mid -1), key);
+}
+
+//Binary Search - Rotated Sorted Array Search
+public int search(final List<Integer> a, int b) {
+   return search(a, 0, a.size()-1, b); 
+}
+	
+public int search(final List<Integer> a, int l, int h, int b) {
+  if(l > h) {
+      return -1;
+  }
+
+  int m = (l+h)/2;
+  int val = a.get(m);
+  if(val == b) {
+      return m;
+  }
+
+  if(a.get(l) <= val) {
+      if(b >= a.get(l) && b <= val) {
+          return search(a, l, m-1, b);
+      }
+      else {
+          return search(a, m+1, h, b);
+      }
+  }
+
+  if(b >= val && b <= a.get(h)) {
+      return search(a, m+1, h, b);
+  }
+  else {
+      return search(a, l, m-1, b);
+  }
+}
+
+// Trees - Identical Binary Tree
+
+public int isSameTree(TreeNode a, TreeNode b) {
+    return  isSame(a,b) ? 1 : 0;
+}
+
+public boolean isSame(TreeNode a, TreeNode b) {
+    if(a == null && b == null) {
+        return true;
+    }
+    if(a == null || b == null) {
+        return false;
+    }
+    return (a.val == b.val) && isSame(a.left, b.left) && 
+    isSame(a.right, b.right);
+}
+
+//Trees - Sorted Array to Balanced BST
+
+public class Solution {
+    static int c = 0;
+	public TreeNode sortedArrayToBST(final List<Integer> a) {
+	    c = 0;
+	    return cBST(a, a.size());
+	}
+	
+	private static TreeNode cBST(final List<Integer> a, int n) { 
+        if(n <= 0) {
+          return null;
+        }
+        TreeNode left = cBST(a, n/2); 
+        TreeNode root = new TreeNode(a.get(c));
+        root.left = left;
+        c += 1;
+        
+        root.right = cBST(a, n - n/2 -1);
+    
+    return root;
+  }
+}
