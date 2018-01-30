@@ -1,0 +1,99 @@
+// GIF - http://recordit.co/nZn6RFnnNb
+
+// Ways to Decode
+
+public int numDecodings(String A) {
+    if(A == null || A.length() == 0) {
+        return 0;
+    }
+    int len = A.length();
+    int[] dp = new int[len+1];
+
+    dp[0] = 1;
+    dp[1] = A.charAt(0) != '0' ? 1 : 0;
+
+    for(int i = 2; i <= len; i++) {
+        int x = Integer.valueOf(A.substring(i-1, i));
+        int y = Integer.valueOf(A.substring(i-2, i));
+        if(x >= 1 && x <= 9) {
+           dp[i] += dp[i-1];  
+        }
+        if(y >= 10 && y <= 26) {
+            dp[i] += dp[i-2];
+        }
+    }
+    return dp[len];
+}
+
+// Stairs
+
+public int climbStairs(int A) {
+    if(A < 3) {
+        return A;
+    }
+
+    int[] K = new int[A+1];
+    K[1] = 1;
+    K[2] = 2;
+    for(int i = 3; i <= A; i++) {
+        K[i] = K[i-1] + K[i-2];
+    }
+    return K[A];
+}
+
+
+// Edit Distance
+
+public int minDistance(String A, String B) {
+    A = A.trim();
+    B = B.trim();
+    int m = A.length();
+    int n = B.length();
+
+    int ops[][] = new int[m+1][n+1];
+
+    for(int i = 0; i <= m ; i++) {
+        for(int j = 0; j <=n ; j++) {
+            if(i == 0) {
+                ops[i][j] = j;
+            }
+            else if(j == 0) {
+                ops[i][j] = i;
+            }
+            else if(A.charAt(i-1) == B.charAt(j-1)) {
+                ops[i][j] = ops[i-1][j-1];
+            }
+            else {
+                ops[i][j] = 1 + min(ops[i][j-1], ops[i-1][j], ops[i-1][j-1]);
+            }
+        }
+    }
+    return ops[m][n];
+}
+
+private int min(int a, int b, int c) {
+    if( a <= b && a <= c) {
+        return a;
+    }
+    else if(b <= a && b <= c) {
+        return b;
+    }
+    return c;
+}
+
+
+// Longest increasing subsequence
+
+public int lis(final List<Integer> A) {
+    ArrayList<Integer> li = new ArrayList<>(A.size());
+    for (Integer num : A) {
+        if (li.size() == 0 || li.get(li.size()-1) < num) {
+            li.add(num);
+        }
+        else {
+            int i = Collections.binarySearch(li, num);
+            li.set((i<0) ? -i-1 : i, num);
+        }
+    }
+    return li.size();
+}
