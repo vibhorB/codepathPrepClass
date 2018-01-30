@@ -1,0 +1,152 @@
+// GIF - http://recordit.co/R5dIif0mt4
+
+// Convert Sorted List to Binary Search Tree
+
+public TreeNode sortedListToBST(ListNode head) {
+  if(head == null){
+        return null;
+    }
+
+    if(head.next == null){
+        return new TreeNode(head.val);
+    }
+
+    ListNode prev = null;
+    ListNode slow = head;
+    ListNode fast = head;
+
+    while(fast != null && fast.next != null){
+        prev = slow;
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+
+    prev.next = null;
+
+    TreeNode root = new TreeNode(slow.val);
+    root.left = sortedListToBST(head);
+    root.right = sortedListToBST(slow.next);
+
+    return root;
+}
+  
+  
+// Sum of Fibonacci numbers
+  
+private List<Integer> fibs = new ArrayList<Integer>();
+  public int fibsum(int A) {
+      fibs.add(0);
+      fibs.add(1);
+      return solve(A);
+  }
+
+  public int solve(int A) {
+      if(A == 0) {
+          return 0;
+      }
+      int h = getHighestFibNumber(A);
+      return 1 + fibsum(A-h); 
+  }
+
+  private int getHighestFibNumber(int n) {
+  int index = 0;
+  int f1 = fibs.get(index);
+  int f2 = fibs.get(index + 1);
+  int temp;
+  while (f2 <= n) {
+    if (index < fibs.size() - 2) {
+      f1 = f2;
+      f2 = fibs.get(index + 2);
+    } else {
+      temp = f1;
+      f1 = f2;
+      f2 = temp + f1;
+      fibs.add(f2);
+    }
+    index++;
+  }
+  return f1;
+}
+
+// Word Ladder 1
+
+public int ladderLength(String start, String end, ArrayList<String> dictV) {
+	    
+  if(start.equals(end)) {
+      return 1;
+  }
+  Set<String> dict = new HashSet<String>(dictV);
+  Set<String> beginSet = new HashSet<String>();
+  Set<String> endSet = new HashSet<String>();
+
+  int len = 1;
+  int strLen = start.length();
+  HashSet<String> visited = new HashSet<String>();
+
+  beginSet.add(start);
+  endSet.add(end);
+  while (!beginSet.isEmpty() && !endSet.isEmpty()) {
+    if (beginSet.size() > endSet.size()) {
+      Set<String> set = beginSet;
+      beginSet = endSet;
+      endSet = set;
+    }
+
+    Set<String> temp = new HashSet<String>();
+    for (String word : beginSet) {
+      char[] chs = word.toCharArray();
+
+      for (int i = 0; i < chs.length; i++) {
+        for (char c = 'a'; c <= 'z'; c++) {
+          char old = chs[i];
+          chs[i] = c;
+          String target = String.valueOf(chs);
+
+          if (endSet.contains(target)) {
+            return len + 1;
+          }
+
+          if (!visited.contains(target) && dict.contains(target)) {
+            temp.add(target);
+            visited.add(target);
+          }
+          chs[i] = old;
+        }
+      }
+    }
+
+    beginSet = temp;
+    len++;
+  }
+
+  return 0;
+}
+
+
+// Clone Graph
+
+public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+    if (node == null){
+        return null;
+    }
+
+    UndirectedGraphNode result = new UndirectedGraphNode(node.label);
+    HashMap<Integer, UndirectedGraphNode> map = new HashMap();
+
+    map.put(result.label, result);
+
+    Queue<UndirectedGraphNode> queue = new LinkedList<>();
+    queue.add(node);
+
+    while (!queue.isEmpty()) {
+        UndirectedGraphNode n = queue.remove();
+        for (UndirectedGraphNode neighbor : n.neighbors) {
+            if (!map.containsKey(neighbor.label)) {
+                map.put(neighbor.label, new UndirectedGraphNode(neighbor.label));
+                queue.add(neighbor);
+            }
+            map.get(n.label).neighbors.add(map.get(neighbor.label));
+        }
+    }
+    return result;
+}
