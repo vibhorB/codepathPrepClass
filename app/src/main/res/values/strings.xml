@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Movies</string>
+    <string name="ratings">Release Date :  %1$s</string>
+</resources>
