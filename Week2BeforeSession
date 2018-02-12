@@ -1,0 +1,167 @@
+GIF - http://recordit.co/tkiQif390U
+
+// Hashing - Largest Continuous Sequence Zero SumBookmark Suggest Edit
+
+public ArrayList<Integer> lszero(ArrayList<Integer> a) {
+      ArrayList<Integer> result = new ArrayList<Integer>();
+
+      if(a == null || a.size() == 0) {
+          return result;
+      }
+
+      int sum = 0;
+      int startIndex = Integer.MAX_VALUE;
+      int maxLen = 0;
+
+      HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+      // map will store 1st index for every sum, 
+      //if that sum is seen again then 2nd time seen will be the ending index for subarray
+      for(int i = 0; i < a.size(); i++) {
+          sum += a.get(i);
+
+          if(sum == 0) {
+              startIndex = 0;
+              maxLen = i+1;
+          }
+          if(map.containsKey(sum)) {
+              if(i - map.get(sum) > maxLen) {
+                  maxLen = i - map.get(sum);
+                  startIndex = i - maxLen + 1;
+              }
+          }
+          else {
+              map.put(sum, i);
+          }
+      }
+
+      for(int i = startIndex; i < startIndex + maxLen; i++) {
+          result.add(a.get(i));
+      }
+      return result;
+  }
+    
+// Hashing - Equal
+
+class Pair {
+      int i;
+      int j;
+
+      Pair(int a, int b) {
+          i = a;
+          j = b;
+      }
+  }
+  public ArrayList<Integer> equal(ArrayList<Integer> a) {
+      ArrayList<Integer> result = new ArrayList<Integer>();
+      if(a == null || a.size() < 4) {
+          return result;
+      }
+      Pair currentSol1 = null;
+      Pair currentSol2 = null;
+      HashMap<Integer, Pair> nums = new HashMap<Integer, Pair>();
+      for(int i = 0; i < a.size(); i++) {
+          for(int j = i+1; j < a.size(); j++) {
+              int sum = a.get(i) + a.get(j);
+              if(!nums.containsKey(sum)) {
+                  nums.put(sum, new Pair(i,j));
+              }
+              else {
+                  Pair existingSum = nums.get(sum);
+                  Pair current = new Pair(i,j);
+                  if(solutionValid(existingSum, i, j)) {
+                      if(currentSol1 == null) {
+                          currentSol1 = existingSum;
+                          currentSol2 = current;
+                      }
+                      else {
+                          boolean isExistingSmaller = getSmallerTuple(currentSol1, currentSol2, 
+                          existingSum, current);
+
+                          if(!isExistingSmaller) {
+                              currentSol1 = existingSum;
+                              currentSol2 = current;
+                          }
+                      }
+
+                  }
+              }
+          }
+      }
+      result.add(currentSol1.i);
+      result.add(currentSol1.j);
+      result.add(currentSol2.i);
+      result.add(currentSol2.j);
+
+      return result;
+  }
+
+  private static boolean getSmallerTuple(Pair c1, Pair c2, Pair n1, Pair n2) {
+      boolean isExistingSmaller = c1.i < n1.i || 
+      ((c1.i == n1.i) && (c1.j < n1.j)) ||
+      ((c1.i == n1.i) && (c1.j == n1.j) && (c2.i < n2.i)) ||
+      ((c1.i == n1.i) && (c1.j == n1.j) && (c2.i == n2.i) && (c2.j < n2.j));
+
+      return isExistingSmaller;
+  }
+
+  private static boolean solutionValid(Pair existing, int i, int j) {
+      return (existing.i < existing.j) && (existing.i < i) &&
+      (i < j) && (existing.j != i) && (existing.j != j);
+  }
+    
+// LinkedList - Remove duplicates from sorted list
+
+public ListNode deleteDuplicates(ListNode a) {
+    if(a == null || a.next == null) {
+        return a;
+    }
+    ListNode node = a;
+
+    while(node.next != null) {
+        if(node.val == node.next.val) {
+            node.next = node.next.next;
+        }
+        else {
+            node = node.next;
+        }
+    }
+    return a;
+}
+  
+//LinkedList - Add two numbers as List
+
+public ListNode addTwoNumbers(ListNode a, ListNode b) {
+	    
+  ListNode res = null;
+  ListNode prev = null;
+
+  int c = 0;
+
+  while(a != null || b != null) {
+    int s = c + (a != null ? a.val : 0) + (b != null? b.val : 0);
+    int v = s%10;
+    c = s/10;
+
+    ListNode t = new ListNode(v);
+    if(res == null) {
+      res = t;
+    }
+    else {
+      prev.next = t;
+    }
+
+    prev = t;
+
+    if(a != null) {
+      a = a.next;
+    }
+    if(b != null) {
+      b = b.next;
+    }
+  }
+
+    if(c > 0) {
+      prev.next = new ListNode(c);
+    }
+    return res;
+  }

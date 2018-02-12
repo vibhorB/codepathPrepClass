@@ -1,0 +1,167 @@
+// GIF - http://g.recordit.co/dxDeFwbI0M.gif
+
+// Possibility of finishing all courses given prework
+
+public int solve(int A, ArrayList<Integer> B, ArrayList<Integer> C) {
+        
+    if (A == 0|| B == null || C == null || B.size() == 0 || C.size() == 0) {
+        return 1;
+    }
+    int[] isVisited = new int[A];
+
+    Map<Integer, List<Integer>> map = new HashMap<Integer, List<Integer>>();
+
+    for (int i = 0; i < B.size(); i++) {
+        if (!map.containsKey(B.get(i)-1)) {
+            map.put(B.get(i)-1, new LinkedList<Integer>());
+        }
+        map.get(B.get(i)-1).add(C.get(i)-1);
+    }
+
+    for (int i = 0; i < A; i++) {
+        if (!dfs(isVisited, map, i)) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+private boolean dfs(int[] isVisited, Map<Integer, List<Integer>> map, int index) {
+    if (isVisited[index] == -1) {
+        return false;
+    }
+    if (isVisited[index] == 1) {
+        return true;
+    }
+    isVisited[index] = -1;
+    if (map.containsKey(index)) {
+        for (int value : map.get(index)) {
+            if (!dfs(isVisited, map, value)) {
+                return false;
+            }
+        }
+    }
+    isVisited[index] = 1;
+    return true;
+}
+
+// Black Shapes
+
+private boolean visited[][];
+private ArrayList<String> input;
+
+public int black(ArrayList<String> A) {
+    if (A == null || A.size() == 0) {
+       return 0;
+    }
+    input = A;
+    int m = A.size();
+    int n = A.get(0).length();
+
+    visited = new boolean[m][n];
+    int count = 0;
+
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (!visited[i][j] && input.get(i).charAt(j) == 'X') {
+                traverse(i, j, m, n);
+                count += 1;
+            }
+        }
+    }
+    return count;
+}
+
+public void traverse(int i, int j, int m, int n) {
+    int d[] = new int[] {1, -1, 0, 0, 0, 0, 1, -1};
+    visited[i][j] = true;
+    for (int k = 0; k < 4; k++) {
+        int o = i + d[k];
+        int p = j + d[k+4];
+        if (isValidElement(o, p, m, n) && !visited[o][p]) {
+            traverse(o, p, m, n);   
+        }
+    }
+}
+
+public boolean isValidElement(int i, int j, int m, int n) {
+    if (i < 0 || i >= m || j < 0 || j >= n) {
+        return false;
+    }
+    if (input.get(i).charAt(j) != 'X') {
+        return false;
+    }
+    return true;
+}
+
+// Level Order
+
+public ArrayList<ArrayList<Integer>> levelOrder(TreeNode A) {
+    ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
+
+    Queue<TreeNode> q1 =new LinkedList<TreeNode>();
+    Queue<TreeNode> q2 =new LinkedList<TreeNode>();
+    q1.add(A);
+
+    while(!q1.isEmpty() || !q2.isEmpty()) {
+        ArrayList<Integer> current = new ArrayList<Integer>();
+        while(!q1.isEmpty()) {
+            if(q1.peek().left != null) {
+                q2.add(q1.peek().left);
+            }
+            if(q1.peek().right != null) {
+                q2.add(q1.peek().right);
+            }
+            current.add(q1.peek().val);
+            q1.remove();
+        }
+        if(current != null && current.size() > 0) {
+            result.add(current);
+            current = new ArrayList<Integer>();
+        }
+
+        while(!q2.isEmpty()) {
+            if(q2.peek().left != null) {
+                q1.add(q2.peek().left);
+            }
+            if(q2.peek().right != null) {
+                q1.add(q2.peek().right);
+            }
+            current.add(q2.peek().val);
+            q2.remove();
+        }
+        if(current != null && current.size() > 0) {
+            result.add(current);
+        }
+    }
+
+    return result;
+}
+
+
+// Stepping Numbers
+
+public ArrayList<Integer> stepnum(int A, int B) {
+    ArrayList<Integer> res = new ArrayList<Integer>();
+    int i = 0;
+    while (A <= B) {
+        if (isStepping(A)) {
+            res.add(A);
+        }
+        A += 1;
+    }
+    return res;
+}
+
+private static boolean isStepping(int i) {
+    if (i >= 0 && i <= 9) {
+        return true;
+    }
+    while (i >= 10) {
+        if (Math.abs(i % 10 - (i / 10) % 10) != 1) { // compare last two digits
+            return false;
+        }
+        i = i / 10;
+    }
+    return true;
+}

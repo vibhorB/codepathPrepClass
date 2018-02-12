@@ -1,0 +1,85 @@
+// GIF - http://recordit.co/r7RyEuS986
+// Note : for assignment, I have done 3 buckets from backtracking and 1 from bit manipulation since it didnt have more buckets
+
+// Backtracking - Letter Phone
+
+private static final String[] KEYS = { "0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
+    
+public ArrayList<String> letterCombinations(String A) {
+    ArrayList<String> result = new ArrayList<String>();
+    process(A, 0, result, new StringBuilder());
+    return result;
+}
+
+public void process(String digits, int ind, ArrayList<String> result, StringBuilder sb) {
+    if(ind == digits.length()) {
+        result.add(sb.toString());
+        return;
+    }
+    else {
+        int lettersIndex = digits.charAt(ind)-'0';
+        String letters = KEYS[lettersIndex];
+        for(int i = 0; i < letters.length(); i++) {
+            sb.append(letters.charAt(i));
+            process(digits, ind+1, result, sb);
+            sb.deleteCharAt(sb.length()-1);
+        }
+    }
+}
+
+// Backtracking - Permutations
+
+public ArrayList<ArrayList<Integer>> permute(ArrayList<Integer> A) {
+    ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
+    if(A == null || A.size() == 0) {
+        return result;
+    }
+    ArrayList<Integer> current = new ArrayList<Integer>();
+    ArrayList<Integer> done = new ArrayList<Integer>();
+    return permute(result, current, done, A);
+}
+
+public ArrayList<ArrayList<Integer>> permute(ArrayList<ArrayList<Integer>> result, 
+                ArrayList<Integer> current,
+                ArrayList<Integer> done,
+                ArrayList<Integer> A) {
+    if(current.size() == A.size()) {
+        result.add(new ArrayList<Integer>(current));
+        return result;
+    }                 
+    for(int i = 0; i < A.size(); i++) {
+        Integer k = A.get(i);
+        if (!done.contains(k)){
+            current.add(k);
+            done.add(k);
+            permute(result, current, done, A);
+            current.remove(current.size()-1);
+            done.remove(done.size()-1);
+        }
+    }
+    return result;
+}
+
+// Backtracking - Gray Code
+
+public ArrayList<Integer> grayCode(int a) {
+    ArrayList<Integer> result = new ArrayList<>();
+      result.add(0);
+      for (int i = 0; i < a; i++) {
+          int s = result.size();
+          for (int j = s - 1; j >= 0; j--)
+              result.add(result.get(j) + s);
+      }
+      return result;
+}
+
+// Bit Manipulation - Min XOR value
+
+public int findMinXor(ArrayList<Integer> A) {
+    int minXor = Integer.MAX_VALUE;
+    Collections.sort(A);
+    for(int i = 0; i < A.size()-1; i++) {
+            minXor = Math.min(A.get(i)^A.get(i+1), minXor);
+    }
+    return minXor;
+}

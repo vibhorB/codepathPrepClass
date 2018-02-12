@@ -1,0 +1,151 @@
+// GIF - http://g.recordit.co/BnUAOQrgWZ.gif
+
+// Recursion/Backtracking - Subset
+
+public ArrayList<ArrayList<Integer>> subsets(ArrayList<Integer> A) {
+    if(A == null) {
+        return null;
+    }
+    Collections.sort(A);
+    ArrayList<ArrayList<Integer>> res = new ArrayList<ArrayList<Integer>>();
+
+    for(int i = 0; i < A.size(); i++) {
+        int val = A.get(i);
+        ArrayList<ArrayList<Integer>> t = new ArrayList<ArrayList<Integer>>();
+
+        for(ArrayList<Integer> current : res) {
+            t.add(new ArrayList<Integer>(current));
+        }
+
+        for(ArrayList<Integer> l : t) {
+            l.add(val);
+        }
+
+        ArrayList<Integer> si = new ArrayList<Integer>();
+        si.add(val);
+        t.add(si);
+
+        res.addAll(t);
+    }
+    res.add(0, new ArrayList<Integer>());
+
+    sort(res);
+    return res;
+}
+
+private void sort(ArrayList<ArrayList<Integer>> res) {
+    Collections.sort(res, new Comparator<ArrayList<Integer>>() {
+        @Override
+        public int compare(ArrayList<Integer> l1, ArrayList<Integer> l2) {
+            int s1 = l1.size();
+            int s2 = l2.size();
+            int l = s1 < s2 ? s1 : s2;
+            for(int i = 0; i < l ; i++) {
+                int c = Integer.compare(l1.get(i), l2.get(i));
+                if(c != 0) {
+                    return c;
+                }
+            }
+            return Integer.compare(s1, s2);
+        }
+    });
+}
+
+//Recursion - Palindrome Partitioning
+
+public ArrayList<ArrayList<String>> partition(String a) {
+  ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
+  if(a == null || a.length() == 0) {
+      return res;
+  }
+  check(res, new ArrayList<String>(), a);
+  return res;
+}
+
+private void check(ArrayList<ArrayList<String>> res, ArrayList<String> temp, 
+              String a) {
+  if(a == null || a.length()== 0) {
+      res.add(new ArrayList<String>(temp));
+      return;
+  }
+  for(int i = 0; i < a.length(); i++) {
+      String curr = a.substring(0,i+1);
+      if(isPalindrome(curr)) {
+          temp.add(curr);
+          check(res, temp, a.substring(i+1));
+          temp.remove(temp.size()-1);
+      }
+  }
+}
+
+private boolean isPalindrome(String a) {
+  ArrayList<Integer> list = new ArrayList<Integer>();
+  a = a.trim();
+  for(int i = 0; i < a.length(); i++) {
+      int validAcsii = getValidAscii(a.charAt(i));
+      if(validAcsii != -1) {
+          list.add(validAcsii);
+      }
+  }
+
+  int size = list.size();
+  boolean isPalindrome = true;
+  for(int i = 0; i < size/2; i++) {
+      if(list.get(i) == list.get(size -1-i)) {
+          continue;
+      }
+      else{
+          isPalindrome = false;
+          break;
+      }
+  }
+  return isPalindrome;
+}
+
+private int getValidAscii(char ch) {
+  if((ch >= 48 && ch <= 57) || (ch >= 65 && ch <= 90)) {
+      return (int) ch;
+  }
+  else if((ch >= 97 && ch <= 122)) {
+      return (int)ch - 32;
+  }
+  else return -1;
+}
+
+//Bit Manipulation - Number of 1 bits
+
+public int numSetBits(long a) {
+  int bits = 0;
+  int mask = 1;
+  for (int i = 0; i < 32; i++) {
+      if ((a & mask) != 0) {
+          bits++;
+      }
+      mask <<= 1;
+  }
+  return bits;
+}
+
+//Bit Manipulation - Single Number
+
+public int singleNumber(final List<Integer> A) {
+    if(A == null || A.size() == 0) {
+        return 0;
+    }
+
+    if(A.size()== 1) {
+        return A.get(0);
+    }
+    List<Integer> C = A;
+    Collections.sort(C);
+
+    for(int i = 0; i < C.size(); i += 2) {
+        if(i == C.size()-1) { // we are at last
+            return C.get(i);
+        }
+        if((C.get(i) ^ C.get(i+1)) != 0) {
+            return C.get(i);
+        }
+    }
+    return 0;
+}

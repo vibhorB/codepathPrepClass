@@ -1,0 +1,116 @@
+// Arrays - Add one to number
+public ArrayList<Integer> plusOne(ArrayList<Integer> a) {
+	    ArrayList<Integer> cleaned = cleanInput(a);
+	    ArrayList<Integer> calc = new ArrayList<Integer>(); 
+	    ArrayList<Integer> result = new ArrayList<Integer>(); 
+	    
+	    if(cleaned.size() == 0) {
+	        result.add(1);
+	        return result;
+	    }
+	    
+	    for(int i = 0; i < cleaned.size(); i++) {
+	       calc.add(0); 
+	    }
+	    
+	    int carryover = 0;
+	    
+	    for(int i = cleaned.size()-1 ; i >=0 ; i--) {
+	        int num = cleaned.get(i) + carryover;
+	        if(i == cleaned.size()-1) {
+	            num += 1;
+	        }
+	        carryover = num/10;
+	        calc.set(i, num%10);
+	    }
+	    if(carryover == 1) {
+	        result.add(1);
+	    }
+        for(int i = 0; i < calc.size(); i++){
+            result.add(calc.get(i));
+        }
+	    
+	    return result;
+	}
+	
+	private ArrayList<Integer> cleanInput(ArrayList<Integer> a) {
+	    ArrayList<Integer> cleaned = new ArrayList<Integer>();
+	    boolean foundStart = false;
+	    for(int i = 0; i < a.size(); i++){
+	        if(!foundStart && a.get(i) == 0){
+	            continue;
+	        } else {
+	            foundStart = true;
+	            cleaned.add(a.get(i));
+	        }
+	    }
+	    return cleaned;
+	}
+  
+  // Arrays - find duplicate in array
+  public int repeatedNumber(final List<Integer> a) {
+	    HashSet<Integer> aa = new HashSet<Integer>();
+	    int dup = -1;
+	    for(int i = 0; i < a.size(); i++){
+	        if(aa.contains(a.get(i))) {
+	            dup = a.get(i);
+	            break;
+	        }
+	        else {
+	            aa.add(a.get(i));
+	        }
+	    }
+	    return dup;
+	}
+  
+  //Strings - Palindrome String
+  public int isPalindrome(String a) {
+	    ArrayList<Integer> list = new ArrayList<Integer>();
+	    a = a.trim();
+	    for(int i = 0; i < a.length(); i++) {
+	        int validAcsii = getValidAscii(a.charAt(i));
+	        if(validAcsii != -1) {
+	            list.add(validAcsii);
+	        }
+	    }
+	    
+	    int size = list.size();
+	    boolean isPalindrome = true;
+	    for(int i = 0; i < size/2; i++) {
+	        if(list.get(i) == list.get(size -1-i)) {
+	            continue;
+	        }
+	        else{
+	            isPalindrome = false;
+	            break;
+	        }
+	    }
+	    return isPalindrome ? 1 : 0;
+	}
+	
+	private int getValidAscii(char ch) {
+	    if((ch >= 48 && ch <= 57) || (ch >= 65 && ch <= 90)) {
+	        return (int) ch;
+	    }
+	    else if((ch >= 97 && ch <= 122)) {
+	        return (int)ch - 32;
+	    }
+	    else return -1;
+	}
+  
+  // Strings - Length of last word
+  public int lengthOfLastWord(final String a) {
+	    String input = a.trim();
+	    int index = -1;
+	    for(int j = 0; j < input.length(); j++) {
+	        if(input.charAt(j) == ' ') {
+	            index = j;
+	        }
+	    }
+	    if(index == -1) {
+	        return input.length();
+	    }
+	    else {
+	        return input.length() - index-1;
+	    }
+	}
